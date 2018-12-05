@@ -31,10 +31,6 @@ export default class MongoDB {
         })
     }
 
-    public static getRepository<T>(repositoryName: string, schema: mongoose.Schema = new mongoose.Schema({ any: {} })): mongoose.Model<T & mongoose.Document, {}>{
-        return mongoose.model(repositoryName, schema) as mongoose.Model<T & mongoose.Document, {}>
-    }
-
     public static schemaOf(json: {[name: string]: any}): mongoose.Schema {
         return new mongoose.Schema(json, { versionKey: false })
     }
