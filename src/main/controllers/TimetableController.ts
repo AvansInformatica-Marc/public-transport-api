@@ -1,33 +1,33 @@
 import { Controller } from "@peregrine/webserver"
 import { HttpErrors } from "@peregrine/exceptions"
-import Operator from "../models/Operator"
+import Ride from "../models/Ride"
 import Repository from "../datasource/Repository";
 
 type json = {[key: string]: any}
 
-export default class OperatorController implements Controller<Operator> {
-    public resourceName: string = "operators"
+export default class TimetableController implements Controller<Ride> {
+    public resourceName: string = "rides"
 
-    constructor(protected repo: Repository<Operator>){}
+    constructor(protected repo: Repository<Ride>){}
     
-    public async get(id: string, _params: json): Promise<Operator> {
+    public async get(id: string, _params: json): Promise<Ride> {
         const model = await this.repo.getById(id)
         if(model) return model
         else throw new HttpErrors.Client.NotFound()
     }
 
-    public async getAll(_params: json): Promise<Operator[]> {
+    public async getAll(_params: json): Promise<Ride[]> {
         return await this.repo.getAll()
     }
 
-    public async create(model: json, _params: json): Promise<Operator> {
-        OperatorController.validateModel(model)
-        return await this.repo.create(model as Operator)
+    public async create(model: json, _params: json): Promise<Ride> {
+        TimetableController.validateModel(model)
+        return await this.repo.create(model as Ride)
     }
 
     public async update(id: string, model: json, _params: json): Promise<void> {
-        OperatorController.validateModel(model)
-        await this.repo.update(id, model as Operator)
+        TimetableController.validateModel(model)
+        await this.repo.update(id, model as Ride)
     }
 
     public updateAll(_model: json, _params: json): void | Promise<void> {
@@ -43,8 +43,12 @@ export default class OperatorController implements Controller<Operator> {
     }
 
     protected static validateModel(model: json){
-        if( (!model.name || typeof model.name != "string") || 
-            ( model.logo && typeof model.logo != "string") )
+        if( (!model.operator || typeof model.operator != "string") || 
+            (!model.type || typeof model.type != "string") || 
+            ( model.line && typeof model.line != "number") || 
+            (!model.stops) || 
+            (!model.excludeDays) || 
+            (!model.departures) )
             throw new HttpErrors.Client.BadRequest()
     }
 }

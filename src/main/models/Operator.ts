@@ -1,3 +1,4 @@
-export default class Operator {
-    constructor(public name: string){}
+export default interface Operator {
+    name: string
+    logo?: string
 }

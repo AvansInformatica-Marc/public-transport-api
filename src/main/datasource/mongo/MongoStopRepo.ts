@@ -1,20 +1,16 @@
 import MongoRepository from "./MongoRepository";
-import Operator from "../../models/Operator";
+import Stop from "../../models/Stop";
 import MongoDB from "./MongoDB";
 
 const types = MongoDB.Types
 
-export default class MongoOperatorRepo extends MongoRepository<Operator>{
+export default class MongoOperatorRepo extends MongoRepository<Stop>{
     constructor(){
-        super("operator", {
+        super("stop", {
             name: {
                 type: types.String,
                 unique: true,
                 required: true
-            }, logo: {
-                type: types.String,
-                unique: true,
-                required: false
             }
         })
     }
