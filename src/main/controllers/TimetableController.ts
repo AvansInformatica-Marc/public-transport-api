@@ -16,8 +16,9 @@ export default class TimetableController implements Controller<Ride> {
         else throw new HttpErrors.Client.NotFound()
     }
 
-    public async getAll(_params: json): Promise<Ride[]> {
-        return await this.repo.getAll()
+    public async getAll(params: json): Promise<Ride[]> {
+        const list = await this.repo.getAll()
+        return params.stopId ? list.filter(item => item.stops.some(stop => stop.stop == params.stopId)) : list
     }
 
     public async create(model: json, _params: json): Promise<Ride> {
