@@ -5,7 +5,7 @@ export default interface Ride {
     bus?: string // ID
     line?: string // 8, 491
     stops: { 
-        name: string // Sliedrecht Baanhoek, Station Dordrecht
+        stop: string // Sliedrecht Baanhoek, Station Dordrecht
         platform?: string // 15, 4b, P
         arrivalAfter?: number // Time between this and previous stop
         waitingTime?: number // Amount of minutes the train or bus waits before departure

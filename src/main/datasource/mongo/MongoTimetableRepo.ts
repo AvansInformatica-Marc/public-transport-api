@@ -31,7 +31,7 @@ export default class MongoTimetableRepo extends MongoRepository<TimetableItem>{
                 unique: false,
                 required: false
             }, stops: [{
-                name: {
+                stop: {
                     type: types.ObjectId,
                     ref: 'stop',
                     unique: false,
@@ -53,11 +53,11 @@ export default class MongoTimetableRepo extends MongoRepository<TimetableItem>{
                 type: types.Number,
                 unique: false,
                 required: false
-            }], departures: {
+            }], departures: [{
                 type: types.String,
                 unique: false,
                 required: false
-            }
+            }]
         })
     }
 }
