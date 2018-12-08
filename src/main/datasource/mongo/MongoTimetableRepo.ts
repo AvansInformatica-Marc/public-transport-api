@@ -1,10 +1,10 @@
 import MongoRepository from "./MongoRepository";
-import TimetableItem from "../../models/Ride";
+import Ride from "../../models/Ride";
 import MongoDB from "./MongoDB";
 
 const types = MongoDB.Types
 
-export default class MongoTimetableRepo extends MongoRepository<TimetableItem>{
+export default class MongoTimetableRepo extends MongoRepository<Ride> {
     constructor(){
         super("timetable", {
             operator: {
