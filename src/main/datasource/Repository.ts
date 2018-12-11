@@ -1,4 +1,4 @@
-import { Entity } from "./mongo/Entity";
+import { Entity } from "../models/db/Entity";
 
 export default interface Repository<T> {
     getById(id: string): Promise<Entity<T> | null>

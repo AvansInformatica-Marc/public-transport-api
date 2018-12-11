@@ -2,7 +2,7 @@ import { Controller } from "@peregrine/webserver"
 import { HttpErrors } from "@peregrine/exceptions"
 import Operator from "../models/Operator"
 import Repository from "../datasource/Repository";
-import { Entity } from "../datasource/mongo/Entity";
+import { Entity } from "../models/db/Entity";
 
 type json = {[key: string]: any}
 
@@ -29,7 +29,7 @@ export default class OperatorController implements Controller<Operator, Entity<O
 
     public async update(id: string, model: json, _params: json, auth?: Entity<Operator>): Promise<void> {
         if(!auth) throw new HttpErrors.Client.Unauthorised()
-        if(!await this.hasEditRights(id, auth)) throw new HttpErrors.Client.Forbidden()
+        if(!(await this.hasEditRights(id, auth))) throw new HttpErrors.Client.Forbidden()
         const operator = this.validateModel(model)
         await this.repo.update(id, operator)
     }
@@ -40,7 +40,7 @@ export default class OperatorController implements Controller<Operator, Entity<O
 
     public async delete(id: string, _params: json, auth?: Entity<Operator>): Promise<void> {
         if(!auth) throw new HttpErrors.Client.Unauthorised()
-        if(!await this.hasEditRights(id, auth)) throw new HttpErrors.Client.Forbidden()
+        if(!(await this.hasEditRights(id, auth))) throw new HttpErrors.Client.Forbidden()
         await this.repo.delete(id)
     }
 
@@ -50,7 +50,7 @@ export default class OperatorController implements Controller<Operator, Entity<O
 
     protected async hasEditRights(id: string, auth: Entity<Operator>): Promise<boolean> {
         const model = await this.repo.getById(id)
-        return !!model && model._id == auth._id
+        return model != null && model._id.toString() == auth._id.toString()
     }
 
     protected validateModel(model: json): Operator {

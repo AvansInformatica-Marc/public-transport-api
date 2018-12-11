@@ -1,7 +1,7 @@
 import mongoose from 'mongoose'
 import MongoDB from "./MongoDB";
 import Repository from "../Repository"
-import { Entity } from './Entity';
+import { Entity } from '../../models/db/Entity';
 
 type json = {[key: string]: any}
 

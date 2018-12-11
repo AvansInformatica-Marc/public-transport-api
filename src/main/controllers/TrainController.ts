@@ -3,7 +3,7 @@ import { HttpErrors } from "@peregrine/exceptions"
 import Train from "../models/Train"
 import Repository from "../datasource/Repository";
 import Operator from "../models/Operator";
-import { Entity } from "../datasource/mongo/Entity";
+import { Entity } from "../models/db/Entity";
 
 type json = {[key: string]: any}
 

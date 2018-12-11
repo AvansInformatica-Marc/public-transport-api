@@ -2,7 +2,7 @@ import { AuthHandler } from "@peregrine/webserver"
 import Operator from "./models/Operator"
 import { Request } from "express";
 import Repository from "./datasource/Repository";
-import { Entity } from "./datasource/mongo/Entity";
+import { Entity } from "./models/db/Entity";
 
 export default class OperatorAuthHandler implements AuthHandler<Entity<Operator>> {
     constructor(protected operatorRepo: Repository<Operator>){}

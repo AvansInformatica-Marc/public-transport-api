@@ -3,7 +3,7 @@ import { HttpErrors } from "@peregrine/exceptions"
 import Ride from "../models/Ride"
 import Repository from "../datasource/Repository";
 import Operator from "../models/Operator";
-import { Entity } from "../datasource/mongo/Entity";
+import { Entity } from "../models/db/Entity";
 
 type json = {[key: string]: any}
 
@@ -32,7 +32,7 @@ export default class TimetableController implements Controller<Ride, Entity<Oper
 
     public async update(id: string, model: json, _params: json, auth?: Entity<Operator>): Promise<void> {
         if(!auth) throw new HttpErrors.Client.Unauthorised()
-        if(!await this.hasEditRights(id, auth)) throw new HttpErrors.Client.Forbidden()
+        if(!(await this.hasEditRights(id, auth))) throw new HttpErrors.Client.Forbidden()
         const ride = this.validateModel(model)
         ride.operator = auth._id
         await this.repo.update(id, ride)
@@ -44,7 +44,7 @@ export default class TimetableController implements Controller<Ride, Entity<Oper
 
     public async delete(id: string, _params: json, auth?: Entity<Operator>): Promise<void> {
         if(!auth) throw new HttpErrors.Client.Unauthorised()
-        if(!await this.hasEditRights(id, auth)) throw new HttpErrors.Client.Forbidden()
+        if(!(await this.hasEditRights(id, auth))) throw new HttpErrors.Client.Forbidden()
         await this.repo.delete(id)
     }
 
@@ -54,12 +54,11 @@ export default class TimetableController implements Controller<Ride, Entity<Oper
 
     protected async hasEditRights(id: string, auth: Entity<Operator>): Promise<boolean> {
         const model = await this.repo.getById(id)
-        return !!model && model.operator == auth._id
+        return model != null && model.operator.toString() == auth._id.toString()
     }
 
     protected validateModel(model: json): Ride {
-        if( (model.operator) || 
-            (!model.type || typeof model.type != "string") || 
+        if( (!model.type || typeof model.type != "string") || 
             ( model.line && typeof model.line != "number") || 
             (!model.stops) || 
             (!model.excludeDays) || 
