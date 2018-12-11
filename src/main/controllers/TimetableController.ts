@@ -32,7 +32,7 @@ export default class TimetableController implements Controller<Ride, Entity<Oper
 
     public async update(id: string, model: json, _params: json, auth?: Entity<Operator>): Promise<void> {
         if(!auth) throw new HttpErrors.Client.Unauthorised()
-        if(!this.hasEditRights(id, auth)) throw new HttpErrors.Client.Forbidden()
+        if(!await this.hasEditRights(id, auth)) throw new HttpErrors.Client.Forbidden()
         const ride = this.validateModel(model)
         ride.operator = auth._id
         await this.repo.update(id, ride)
@@ -44,7 +44,7 @@ export default class TimetableController implements Controller<Ride, Entity<Oper
 
     public async delete(id: string, _params: json, auth?: Entity<Operator>): Promise<void> {
         if(!auth) throw new HttpErrors.Client.Unauthorised()
-        if(!this.hasEditRights(id, auth)) throw new HttpErrors.Client.Forbidden()
+        if(!await this.hasEditRights(id, auth)) throw new HttpErrors.Client.Forbidden()
         await this.repo.delete(id)
     }
 

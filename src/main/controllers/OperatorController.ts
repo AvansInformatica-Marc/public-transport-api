@@ -29,7 +29,7 @@ export default class OperatorController implements Controller<Operator, Entity<O
 
     public async update(id: string, model: json, _params: json, auth?: Entity<Operator>): Promise<void> {
         if(!auth) throw new HttpErrors.Client.Unauthorised()
-        if(!this.hasEditRights(id, auth)) throw new HttpErrors.Client.Forbidden()
+        if(!await this.hasEditRights(id, auth)) throw new HttpErrors.Client.Forbidden()
         const operator = this.validateModel(model)
         await this.repo.update(id, operator)
     }
@@ -40,7 +40,7 @@ export default class OperatorController implements Controller<Operator, Entity<O
 
     public async delete(id: string, _params: json, auth?: Entity<Operator>): Promise<void> {
         if(!auth) throw new HttpErrors.Client.Unauthorised()
-        if(!this.hasEditRights(id, auth)) throw new HttpErrors.Client.Forbidden()
+        if(!await this.hasEditRights(id, auth)) throw new HttpErrors.Client.Forbidden()
         await this.repo.delete(id)
     }
 
