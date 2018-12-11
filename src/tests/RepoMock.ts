@@ -1,6 +1,6 @@
 import Repository from "../main/datasource/Repository"
 import NotImplementedException from "./NotImplementedException"
-import { Entity } from "../main/datasource/mongo/Entity";
+import { Entity } from "../main/models/db/Entity";
 
 export default class RepoMock<T> implements Repository<T> {
     public async getById(_id: string): Promise<Entity<T> | null> {
