@@ -1,5 +1,5 @@
 import Repository from "../main/datasource/Repository"
-import NotImplementedException from "./NotImplementedException"
+import { NotImplementedException } from "@peregrine/exceptions"
 import { Entity } from "../main/models/db/Entity";
 
 export default class RepoMock<T> implements Repository<T> {
