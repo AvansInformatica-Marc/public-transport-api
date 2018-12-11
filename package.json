@@ -15,7 +15,7 @@
   "license": "UNLICENSED",
   "dependencies": {
     "mongoose": "^5.3.14",
-    "@peregrine/webserver": "^0.1.1",
+    "@peregrine/webserver": "^0.1.4",
     "@peregrine/exceptions": "^0.1.1"
   },
   "devDependencies": {

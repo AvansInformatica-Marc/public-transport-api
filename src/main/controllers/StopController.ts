@@ -2,48 +2,54 @@ import { Controller } from "@peregrine/webserver"
 import { HttpErrors } from "@peregrine/exceptions"
 import Stop from "../models/Stop"
 import Repository from "../datasource/Repository";
+import Operator from "../models/Operator";
+import { Entity } from "../datasource/mongo/Entity";
 
 type json = {[key: string]: any}
 
-export default class StopController implements Controller<Stop> {
+export default class StopController implements Controller<Stop, Entity<Operator>> {
     public resourceName: string = "stops"
 
     constructor(protected repo: Repository<Stop>){}
     
-    public async get(id: string, _params: json): Promise<Stop> {
+    public async get(id: string, _params: json, _auth?: Entity<Operator>): Promise<Stop> {
         const model = await this.repo.getById(id)
-        if(model) return model
-        else throw new HttpErrors.Client.NotFound()
+        if(!model) throw new HttpErrors.Client.NotFound()
+        return model
     }
 
-    public async getAll(_params: json): Promise<Stop[]> {
+    public async getAll(_params: json, _auth?: Entity<Operator>): Promise<Stop[]> {
         return await this.repo.getAll()
     }
 
-    public async create(model: json, _params: json): Promise<Stop> {
-        StopController.validateModel(model)
-        return await this.repo.create(model as Stop)
+    public async create(model: json, _params: json, auth?: Entity<Operator>): Promise<Stop> {
+        if(!auth) throw new HttpErrors.Client.Unauthorised()
+        const stop = this.validateModel(model)
+        return await this.repo.create(stop)
     }
 
-    public async update(id: string, model: json, _params: json): Promise<void> {
-        StopController.validateModel(model)
-        await this.repo.update(id, model as Stop)
+    public async update(id: string, model: json, _params: json, auth?: Entity<Operator>): Promise<void> {
+        if(!auth) throw new HttpErrors.Client.Unauthorised()
+        const stop = this.validateModel(model)
+        await this.repo.update(id, stop)
     }
 
-    public updateAll(_model: json, _params: json): void | Promise<void> {
+    public updateAll(_model: json, _params: json, _auth?: Entity<Operator>): void | Promise<void> {
         throw new HttpErrors.Client.MethodNotAllowed()
     }
 
-    public async delete(id: string, _params: json): Promise<void> {
+    public async delete(id: string, _params: json, auth?: Entity<Operator>): Promise<void> {
+        if(!auth) throw new HttpErrors.Client.Unauthorised()
         await this.repo.delete(id)
     }
 
-    public deleteAll(_params: json): void | Promise<void> {
+    public deleteAll(_params: json, _auth?: Entity<Operator>): void | Promise<void> {
         throw new HttpErrors.Client.MethodNotAllowed()
     }
 
-    protected static validateModel(model: json){
+    protected validateModel(model: json): Stop {
         if( (!model.name || typeof model.name != "string") )
             throw new HttpErrors.Client.BadRequest()
+        return model as Stop
     }
 }
