@@ -58,5 +58,8 @@
   },
   "references": [
     { "path": "../main" }
+  ],
+  "exclude": [
+    "node_modules"
   ]
 }
