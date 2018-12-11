@@ -9,9 +9,9 @@ import MongoTrainRepo from "./datasource/mongo/MongoTrainRepo";
 import TimetableController from "./controllers/TimetableController";
 import MongoTimetableRepo from "./datasource/mongo/MongoTimetableRepo";
 import OperatorAuthHandler from "./OperatorAuthHandler";
+import dotenv from "dotenv"
 
-if (!process.env.DB_NAME)
-    require('dotenv').load()
+if (!process.env.DB_NAME) dotenv.load();
 
 (async () => {
     const db = new MongoDB(process.env.DB_NAME || "public-transport")
