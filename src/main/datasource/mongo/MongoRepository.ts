@@ -9,7 +9,7 @@ export default class MongoRepository<T> implements Repository<T> {
     protected mongoRepo: mongoose.Model<T & mongoose.Document, {}>
 
     constructor(public collectionName: string, schema: json){
-        this.mongoRepo = mongoose.model(collectionName, MongoDB.schemaOf(schema)) as mongoose.Model<T & mongoose.Document, {}>
+        this.mongoRepo = mongoose.model(collectionName, MongoDB.schemaOf(schema), collectionName) as mongoose.Model<T & mongoose.Document, {}>
     }
 
     public async getById(id: string): Promise<Entity<T> | null> {
