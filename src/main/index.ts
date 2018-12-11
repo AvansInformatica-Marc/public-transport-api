@@ -10,9 +10,16 @@ import TimetableController from "./controllers/TimetableController";
 import MongoTimetableRepo from "./datasource/mongo/MongoTimetableRepo";
 import OperatorAuthHandler from "./OperatorAuthHandler";
 
+if (!process.env.DB_NAME)
+    require('dotenv').load()
+
 (async () => {
-    const db = new MongoDB("public-transport")
-    const dbConnection = await db.connect()
+    const db = new MongoDB(process.env.DB_NAME || "public-transport")
+    const credentials = process.env.DB_USER && process.env.DB_PASSWORD ? {
+        user: process.env.DB_USER,
+        password: process.env.DB_PASSWORD
+    } : undefined
+    const dbConnection = await db.connect(process.env.DB_HOST, process.env.DB_PORT ? parseInt(process.env.DB_PORT) : undefined, credentials)
     console.log(`Connected to MongoDB on ${dbConnection.connectionString}`)
     
     const server = new Server()
