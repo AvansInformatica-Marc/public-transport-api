@@ -12,9 +12,9 @@ export default class MongoDB {
 
     constructor(protected readonly dbName: string){}
 
-    public connect(host: string = "localhost", port: number = 27017, credentials?: { user: string, password: string }): Promise<MongoDBInstance> {
+    public connect(host: string = "localhost", port: number | null = 27017, credentials?: { user: string, password: string }): Promise<MongoDBInstance> {
         const connectionString = credentials ?
-            `mongodb://${credentials.user}:${credentials.password}@${host}:${port}/${this.dbName}` :
+            `mongodb+srv://${credentials.user}:${credentials.password}@${host}${port ? `:${port}` : ""}/${this.dbName}?retryWrites=true` :
             `mongodb://${host}:${port}/${this.dbName}`
 
         return new Promise((resolve, reject) => {

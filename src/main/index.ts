@@ -19,7 +19,7 @@ if (!process.env.DB_NAME) dotenv.load();
         user: process.env.DB_USER,
         password: process.env.DB_PASSWORD
     } : undefined
-    const dbConnection = await db.connect(process.env.DB_HOST, process.env.DB_PORT ? parseInt(process.env.DB_PORT) : undefined, credentials)
+    const dbConnection = await db.connect(process.env.DB_HOST, process.env.DB_PORT ? parseInt(process.env.DB_PORT) : null, credentials)
     console.log(`Connected to MongoDB on ${dbConnection.connectionString}`)
     
     const server = new Server()
