@@ -24,8 +24,9 @@ if (!process.env.DB_NAME) dotenv.load();
     
     const server = new Server()
     server.setCorsHeaders()
-    const authHandler = new OperatorAuthHandler(new MongoOperatorRepo())
-    server.addController(new OperatorController(new MongoOperatorRepo()), authHandler)
+    const operatorRepo = new MongoOperatorRepo()
+    const authHandler = new OperatorAuthHandler(operatorRepo)
+    server.addController(new OperatorController(operatorRepo), authHandler)
     server.addController(new StopController(new MongoStopRepo()), authHandler)
     server.addController(new TrainController(new MongoTrainRepo()), authHandler)
     server.addController(new TimetableController(new MongoTimetableRepo()), authHandler)
