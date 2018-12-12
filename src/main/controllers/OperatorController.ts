@@ -12,11 +12,7 @@ export default class OperatorController implements Controller<Entity<Operator>, 
     constructor(protected repo: Repository<Operator>){}
     
     public async get(id: string, _params: json, auth?: Entity<Operator> | { admin: true }): Promise<Entity<Operator>> {
-        if(id == "@me" && auth) {
-            if((auth as { admin?: boolean }).admin) 
-                throw new Status.OK({ admin: true })
-            return auth as Entity<Operator>
-        }
+        if(id == "@me" && auth) return auth as Entity<Operator>
         const model = await this.repo.getById(id)
         if(!model) throw new HttpErrors.Client.NotFound()
         return model
