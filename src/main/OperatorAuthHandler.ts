@@ -4,12 +4,12 @@ import { Request } from "express";
 import Repository from "./datasource/Repository";
 import { Entity } from "./models/db/Entity";
 
-export default class OperatorAuthHandler implements AuthHandler<Entity<Operator>> {
+export default class OperatorAuthHandler implements AuthHandler<Entity<Operator> | { admin: true }> {
     constructor(protected operatorRepo: Repository<Operator>){}
 
-    public async getAuth(request: Request): Promise<Entity<Operator> | undefined> {
+    public async getAuth(request: Request): Promise<Entity<Operator> | { admin: true } | undefined> {
         const token = this.getTokenFromRequest(request)
-        return token ? await this.getOperatorFromToken(token) : undefined
+        return token ? process.env.ADMIN_TOKEN && token == process.env.ADMIN_TOKEN ? { admin: true } : await this.getOperatorFromToken(token) : undefined
     }
 
     protected getTokenFromRequest(request: Request): string | null {
